@@ -13,8 +13,10 @@ namespace Ksu.Cis300.PriorityQueueLibrary
     /// An immutable generic binary tree node that can draw itself.
     /// </summary>
     /// <typeparam name="T">The type of the elements stored in the tree.</typeparam>
-    public partial class BinaryTreeNode<T> : ITree
+    public partial class LeftistTree<T> : ITree
     {
+
+        private int _nullPathLength;
         /// <summary>
         /// Gets the data stored in this node.
         /// </summary>
@@ -23,12 +25,22 @@ namespace Ksu.Cis300.PriorityQueueLibrary
         /// <summary>
         /// Gets this node's left child.
         /// </summary>
-        public BinaryTreeNode<T> LeftChild { get; }
+        public LeftistTree<T> LeftChild { get; }
 
         /// <summary>
         /// Gets this node's right child.
         /// </summary>
-        public BinaryTreeNode<T> RightChild { get; }
+        public LeftistTree<T> RightChild { get; }
+
+
+        public static int NullPathLength(LeftistTree<T> t)
+        {
+            if (t != null)
+            {
+                return t._nullPathLength;
+            }
+            return 0;
+        }
 
         /// <summary>
         /// Constructs a BinaryTreeNode with the given data, left child, and right child.
@@ -36,11 +48,22 @@ namespace Ksu.Cis300.PriorityQueueLibrary
         /// <param name="data">The data stored in the node.</param>
         /// <param name="left">The left child.</param>
         /// <param name="right">The right child.</param>
-        public BinaryTreeNode(T data, BinaryTreeNode<T> left, BinaryTreeNode<T> right)
+        public LeftistTree(T data, LeftistTree<T> left, LeftistTree<T> right)
         {
-            Data = data;
-            LeftChild = left;
-            RightChild = right;
+            Data = data; 
+            if (NullPathLength(left) > NullPathLength(right))
+            {
+                RightChild = right;
+                LeftChild = left;
+            }
+            else
+            {
+                RightChild = left;
+                LeftChild = right;
+            }
+
+            _nullPathLength = NullPathLength(RightChild) + 1;
+
         }
     }
 }
